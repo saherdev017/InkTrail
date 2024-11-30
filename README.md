@@ -34,5 +34,6 @@ A web-based application where users can upload a sample of their handwriting to 
 
 1. Clone the repository:
    ```bash
-  git clone https://github.com/saherdev017/InkTrail.git
+   git clone https://github.com/saherdev017/InkTrail.git
+
    
