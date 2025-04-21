@@ -56,8 +56,6 @@ Front.set('x',-1); Front.set('X',1);
 Front.set('y',0); Front.set('Y',1);
 Front.set('z',0); Front.set('Z',1);
 
-Back.set(',',1); Front.set(',',1);
-
 
 Back.set('a',0); Back.set('A',-1);
 Back.set('b',0); Back.set('B',0);
@@ -85,7 +83,7 @@ Back.set('w',-1); Back.set('W',1);
 Back.set('x',-1); Back.set('X',1);
 Back.set('y',-1); Back.set('Y',1);
 Back.set('z',0); Back.set('Z',0);
-
+Back.set(',',1); Front.set(',',1);
 
 
 
@@ -307,6 +305,7 @@ else{
     Paths = adjustPaths(Paths);
     
 
+
     /*
     if text[i]==space --> skip
     text[i+1]== not to be connected 
@@ -314,17 +313,30 @@ else{
 
      if(text[i]!=" "&&text[i+1]!=" "){
 
+  
     Paths = adjustPaths(Paths);
     connectingCurve = createConnectingCurve(Paths[i], Paths[i+1]);
      // Splice paths with the connecting curve
     Paths = splicePathsWithConnectingCurve(Paths, connectingCurve,i);
     Paths = adjustPaths(Paths);
+    
+
    
     }
+    
+
     */
 
+    // else if(text[i+1]==" "){//next letter is space no need to connect
+    //     Paths = adjustPaths(Paths);
+    // }
     
+    // else if(text[i-1]==)
+    // else{
+    //     booljoin=false;
+    // Paths = adjustPaths(Paths,booljoin);
    
+    // }
   }
   Paths = adjustPaths(Paths);
 
@@ -436,15 +448,8 @@ function adjustPaths(paths) {
     else {
       const prevBounds = getBounds(adjustedPaths[index - 1]);
       const currBounds = getBounds(path);
-     
-      // If the character is a comma, you might want to tweak its position slightly
-      if (text[index] == ',') {
-        // You can adjust the positioning of the comma here if needed
-        xOffset += prevBounds.maxX - currBounds.minX - (kerning / 2); // Adjust comma positioning
-      } 
 
-
-      else{xOffset += prevBounds.maxX - currBounds.minX - kerning;}
+      xOffset += prevBounds.maxX - currBounds.minX - kerning;
       const translatedPath = translatePath(path, xOffset,yOffset);
       adjustedPaths.push(translatedPath);
       charCount++;
@@ -538,7 +543,13 @@ function splicePathsWithConnectingCurve(paths, curve ,i) {
     
     // Ensure path2 begins with the last point of the curve
     splicedPaths[i+1] = curve.slice(-1).concat(splicedPaths[i+1].slice(1)); // Remove first point of path2 and add the curve's last point
-  
+    
+    // for(let i=1;i<paths.length;i++){// For path2, retain its first point but start with the curve's last point
+    // splicedPaths[i] = paths[i].slice(0); // Retain path2 as is
+    
+    // // Ensure path2 begins with the last point of the curve
+    // splicedPaths[i] = curve.slice(-1).concat(splicedPaths[i].slice(1));} // Remove first point of path2 and add the curve's last point
+    
     return splicedPaths;
   }
 

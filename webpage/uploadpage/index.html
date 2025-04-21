@@ -1,6 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Upload Your Handwriting</title>
+
+  <!-- Bootstrap -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+
+  <!-- Your custom styles + fonts -->
+  <link rel="stylesheet" href="/page1/css/style.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Sevillana&display=swap');
+  </style>
+</head>
+<body>
+  <section id="title" class="gradient-background">
+    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light gradient-background">
+      <div class="col-md-5 p-lg-5 mx-auto my-5">
+        <h1 class="display-4 fw-bold">Upload your Handwriting</h1>
+        <p class="lead fw-normal">
+          We will use it to analyse the contours of your handwriting and
+          create the text in your handwriting
+        </p>
+        <div>
+          <input
+            class="form-control form-control-lg"
+            type="file"
+            id="uploadJSON"
+            accept=".json"
+          />
+        </div>
+      </div>
+
+      <div class="col-md-10 mx-auto col-lg-6">
+        <div class="p-10 p-md-5 border rounded-3 bg-body-tertiary">
+          <div class="form-floating mb-3">
+            <textarea
+              class="form-control"
+              id="floatingTextarea"
+              placeholder="Enter your text here"
+              style="height:200px;"
+            ></textarea>
+            <label for="floatingTextarea">Enter Details</label>
+          </div>
+
+          <!-- note type="button" so JS can intercept -->
+          <button
+            class="w-100 btn btn-lg btn-primary"
+            id="submit-btn"
+            type="button"
+            style="color: white; font-weight:300; background-color: black;"
+          >
+            Submit
+          </button>
+
+          <hr class="my-4" />
+          <small class="text-body-secondary">
+            By clicking Submit, you cannot make any changes afterwards.
+          </small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <section id="footer">
+    <div class="container">
+      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <div class="col-md-4 d-flex align-items-center">
+          <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">                 
+          </a>
+          <span class="mb-3 mb-md-0 text-body-secondary">© 2024, Saher Dev</span>
+        </div>
+    
+        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+          <li class="ms-3"><a class="text-body-secondary" href="https://www.linkedin.com/in/saher-dev-a8191428a/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
+            <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/>
+          </svg></a>
+          </li>
+          <li class="ms-3"><a class="text-body-secondary" href="mailto:b23cs1059@iitj.ac.in"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16">
+            <path d="M15.545 6.558a9.4 9.4 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.7 7.7 0 0 1 5.352 2.082l-2.284 2.284A4.35 4.35 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.8 4.8 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.7 3.7 0 0 0 1.599-2.431H8v-3.08z"/>
+          </svg></a></li>
+          <li class="ms-3"><a class="text-body-secondary" href="https://github.com/saherdev017"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
+          </svg></a></li>
+        </ul>
+      </footer>
+    </div>
+  </section>
+
+  <script>
+    let uploadedJSONData = null;
+
+    // 1) When a file is chosen, parse it and stash in localStorage
+    document
+      .getElementById("uploadJSON")
+      .addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          try {
+            uploadedJSONData = JSON.parse(e.target.result);
+            localStorage.setItem(
+              "handwritingPaths",
+              JSON.stringify(uploadedJSONData)
+            );
+            alert("✅ Handwriting data stored. You can now submit.");
+          } catch (err) {
+            console.error(err);
+            alert("❌ Failed to parse the uploaded JSON.");
+          }
+        };
+        reader.readAsText(file);
+      });
+
+    // 2) When you click Submit, grab the textarea, validate, store & redirect
+    document
+      .getElementById("submit-btn")
+      .addEventListener("click", function () {
+        const userInput = document.getElementById("floatingTextarea").value.trim();
+
+        if (!localStorage.getItem("handwritingPaths")) {
+          alert("⚠️ Please upload your handwriting JSON file first.");
+          return;
+        }
+        if (!userInput) {
+          alert("⚠️ Please enter some text to render.");
+          return;
+        }
+
+        localStorage.setItem("userInput", userInput);
+        // go to your renderer page:
+        window.location.href = "/PersonalTextOutput/index.html";
+      });
+  </script>
+</body>
+</html>
+
+ <!-- <!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Page</title>
@@ -17,10 +164,24 @@
               <h1 class="display-4 fw-bold">Upload your Handwriting</h1>
               <p class="lead fw-normal">We will use it to analyse the contours of your handwriting and create the text in your handwriting</p>
               <div>
-                <!-- <label for="formFileLg" class="form-label">Large file input example</label> -->
-                <input class="form-control form-control-lg" id="formFileLg" type="file">
+                <input class="form-control form-control-lg" type="file" id="uploadJSON" accept=".json" />
+               
               </div>
 
+            </div>
+
+
+            <div class="col-md-10 mx-auto col-lg-6">
+              <form class="p-10 p-md-5 border rounded-3 bg-body-tertiary" action="/textoutput/index.html" >
+                <div class="form-floating mb-3">
+                  <textarea class="form-control" id="floatingTextarea" placeholder="Enter your text here" style="height:200px;"></textarea>
+                  <label for="floatingTextarea">Enter Details</label>
+                </div>
+                
+                <button class="w-100 btn btn-lg btn-primary" id="submit-btn" type="submit" style="color: white; font-weight:300; background-color: black;">Submit</button>
+                <hr class="my-4">
+                <small class="text-body-secondary">By clicking Submit, you cannot make any changes afterwards.</small>
+              </form>
             </div>
 
           </div>
@@ -28,7 +189,7 @@
         
     </section>
 
-     <!-- Footer -->
+    
     <section id="footer">
         <div class="container">
           <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
@@ -53,5 +214,42 @@
           </footer>
         </div>
       </section>
+
+
+      <script>
+          let uploadedJSONData = null;
+
+          document.getElementById("uploadJSON").addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              try {
+                uploadedJSONData = JSON.parse(e.target.result);
+                localStorage.setItem("handwritingPaths", JSON.stringify(uploadedJSONData));
+                alert("✅ Handwriting data stored. You can now submit.");
+              } catch (err) {
+                alert("❌ Failed to parse the uploaded JSON.");
+                console.error(err);
+              }
+            };
+            reader.readAsText(file);
+          });
+
+          document.getElementById("submit-btn").addEventListener("click", function () {
+            const userInput = document.getElementById("floatingTextarea").value;
+            localStorage.setItem('userInput', userInput);
+
+            if (!localStorage.getItem("handwritingPaths")) {
+              alert("⚠️ Please upload your handwriting JSON file first.");
+              return;
+            }
+
+            // Redirect after saving
+            window.location.href = "/textoutput/index.html";
+          });
+</script>
+
 </body>
-</html>
+</html>  -->
