@@ -1,4 +1,4 @@
-'''
+
   _____       _ _______        _ _ 
  |_   _|     | |__   __|      (_) |
    | |  _ __ | | _| |_ __ __ _ _| |
@@ -7,7 +7,7 @@
  |_____|_| |_|_|\_\_|_|  \__,_|_|_|
                                    
                                    
-'''
+
 #INK TRAIL
 
 A web-based application where users can upload a sample of their handwriting to generate custom text in their style. Alternatively, users can type text and receive it rendered in your pre-trained handwriting.
