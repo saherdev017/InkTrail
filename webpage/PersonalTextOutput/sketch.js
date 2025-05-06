@@ -1,6 +1,9 @@
 // Creates two paths of points and puts them into an SVG file
 // Hit 's' to save the SVG file
 
+let paperStyle = 'plain';  // 'plain', 'lined', 'margined', 'grid', …
+
+
 /**
  * Smooths a path by repeatedly “Chaikin‐izing” it.
  * @param {Array<{x:number,y:number}>} path  Original point‐list
@@ -52,6 +55,9 @@ let svg;
 let text = localStorage.getItem('userInput');
 let data=null;
 
+const LEFT_MARGIN = 20;    // match your drawPaper('margined') red line at x=40
+
+
 // // let path = []; this is the form
 let path_i_dot = [];
 let path_j_dot = [];
@@ -61,6 +67,68 @@ let paths = {}; // Create an empty object //main key object
 for (let letter of "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") {
     paths["path_" + letter] = []; // Create a property like path_a, path_b, etc., and assign it an empty array
 }
+
+// punctuation
+
+// period “.”
+paths.path_period = [
+  { x:  8, y: 25 },
+  { x: 10, y: 25 },
+  { x: 10, y: 27 },
+  { x:  8, y: 27 },
+  { x:  8, y: 25 }
+];
+
+// exclamation “!”
+paths.path_exclamation = [
+  // main vertical stroke
+  { x: 10, y:  9 },
+  { x: 10, y: 19 },
+  // dot
+  { x:  9, y: 23 },
+  { x: 11, y: 23 }
+];
+
+// question “?”
+paths.path_question = [
+  { x:  6, y: 12 },
+  { x:  8, y: 10 },
+  { x: 12, y: 10 },
+  { x: 14, y: 12 },
+  { x: 14, y: 14 },
+  { x: 12, y: 17 },
+  { x:  8, y: 17 },
+  { x:  8, y: 19 },
+  { x:  8, y: 21 }
+];
+
+// semicolon “;” (dot + comma‐tail)
+paths.path_semicolon = [
+  // dot
+  { x:  8, y: 23 },
+  { x: 10, y: 23 },
+  { x: 10, y: 25 },
+  { x:  8, y: 25 },
+  // tiny tail (reuse comma‐style)
+  { x:  9, y: 26 },
+  { x: 11, y: 29 },
+  { x: 10, y: 31 }
+];
+
+// colon “:” (two dots)
+paths.path_colon = [
+  // upper dot
+  { x:  8, y: 20 },
+  { x: 10, y: 20 },
+  { x: 10, y: 22 },
+  { x:  8, y: 22 },
+  // lower dot
+  { x:  8, y: 26 },
+  { x: 10, y: 26 },
+  { x: 10, y: 28 },
+  { x:  8, y: 28 }
+];
+
 
  // grab the JSON out of localStorage
 
@@ -143,14 +211,6 @@ if (raw) {
 }
 
 
-
-
-
-// let raw = localStorage.getItem("handwritingPaths");
-//  if (!raw) return;
-
-//  const data = JSON.parse(raw);
- 
  
 
 const emptyPath = [];
@@ -228,7 +288,19 @@ Back.set('z',0); Back.set('Z',0);
 
 /*SETUP*/
 function setup() {
-  createCanvas(550, 500);
+  createCanvas(550, 500).parent('canvas-container');
+  // hook the dropdown
+const selector = document.getElementById('styleSelector');
+selector.value = paperStyle;  // sync initial
+selector.addEventListener('change', () => {
+  paperStyle = selector.value;
+  redraw();        // re-draw with the new style
+});
+
+// hook the download button
+const dl = document.getElementById('downloadBtn');
+dl.addEventListener('click', () => saveCanvas('myCanvas', 'png'));
+
   angleMode(DEGREES);
   svg = new SvgBuilder();
 
@@ -252,6 +324,7 @@ function setup() {
     // // now fill your paths
     paths[key].push(...pts);
   }
+  comma.push( {x:8.4,y:26.6},{x:7.5,y:27.8},{x:8.9,y:29.4},{x:10.2,y:28.2},{x:9.1,y:27.1},{x:8.7,y:26.9},{x:10.7,y:28.5},{x:9.9,y:30.4},{x:7.7,y:31.9},{x:5.5,y:31.8},{x:4.2,y:31.2});
 
 
   /*
@@ -261,11 +334,6 @@ function setup() {
     {x:0.3,y:23.5},{x:1.8,y:21.4},{x:3.2,y:18.2},{x:4.9,y:12.3},{x:7.8,y:11.7},{x:10.6,y:12.7},{x:12.0,y:16.0},{x:12.3,y:17.4},{x:10.7,y:13.7},{x:7.7,y:12.2},{x:5.0,y:13.4},{x:4.2,y:16.1},{x:4.0,y:18.9},{x:5.7,y:21.6},{x:8.1,y:23.5},{x:11.1,y:23.2},{x:12.2,y:18.7},{x:11.5,y:15.3},{x:12.1,y:19.8},{x:13.3,y:21.6},{x:15.3,y:23.4},{x:17.6,y:23.3},{x:20.2,y:21.0}
   );
 
-  
-   
-  paths.path_s.push(
-    {x:0.8,y:23.3},{x:4.6,y:21.0},{x:6.8,y:18.3},{x:8.2,y:14.3},{x:9.1,y:10.9},{x:6.7,y:9.6},{x:5.0,y:10.1},{x:4.2,y:12.1},{x:4.1,y:15.3},{x:9.3,y:18.4},{x:11.6,y:21.6},{x:9.6,y:23.6},{x:7.1,y:23.6},{x:5.8,y:22.5},{x:2.7,y:19.7},{x:7.1,y:22.0},{x:10.0,y:22.8},{x:12.5,y:23.7},{x:14.8,y:22.8},{x:16.3,y:21.6}
-  );
   */
 
 
@@ -301,9 +369,31 @@ for (let key of Object.keys(paths)) {//going thru each key
 */
 
 // pushing paths
+
+
 for (let letter of text) {
    if(letter==','){
     Paths.push(comma);
+    continue;
+  }
+  if(letter=='\n'){
+    Paths.push(emptyPath);
+    continue;
+  }
+  else if (letter === ".") {
+    Paths.push(paths.path_period);
+  }
+  else if (letter === "!") {
+    Paths.push(paths.path_exclamation);
+  }
+  else if (letter === "?") {
+    Paths.push(paths.path_question);
+  }
+  else if (letter === ";") {
+    Paths.push(paths.path_semicolon);
+  }
+  else if (letter === ":") {
+    Paths.push(paths.path_colon);
   }
 if(letter!=" "){
     Paths.push(paths["path_" + letter]) ;
@@ -322,6 +412,15 @@ else{
         continue; // Skip connection for empty paths
       }
       if (text[i] ==',' || text[i + 1] == ',') {
+        continue; // Skip connection for comma
+      }
+      if (text[i] =='?' || text[i + 1] == '?') {
+        continue; // Skip connection for comma
+      }
+      if (text[i] ==':' || text[i + 1] == ':') {
+        continue; // Skip connection for comma
+      }
+      if (text[i] ==';' || text[i + 1] == ';') {
         continue; // Skip connection for comma
       }
      
@@ -370,6 +469,8 @@ else{
 
 function draw() {
   background("#ffffff");
+  
+  drawPaper(paperStyle);
 
   noFill();
   stroke("#000000");
@@ -391,27 +492,56 @@ function keyPressed() {
   if (key == "s") {
     svg.save();
   }
+  if (key === 'd') {
+    saveCanvas('myHandwriting', 'png');
+  }
+  
+    if (key === '1') paperStyle = 'plain';
+    if (key === '2') paperStyle = 'lined';
+    if (key === '3') {paperStyle = 'margined';Paths = adjustPaths(Paths, text);
+      redraw();
+  }
+    if (key === '4') paperStyle = 'grid';
+    redraw();
+  
 }
+
 
 
 
 // Adjust paths with kerning
 function adjustPaths(paths) {
   let adjustedPaths = [];
-  let xOffset = 0; // Starting x-offset
+  
+  let xOffset =0;
   let yOffset = 0; // Starting y-offset
+ 
   const lineHeight = 0; // Space between lines
   const kerning = 1; // Space between letters
   let charCount = 0; // Tracks the number of characters in the current line
   booljoin=true;
   lineswap=false;
 
+
+ 
+
   paths.forEach((path, index) => {
-    if (charCount > 35 && path === emptyPath ||path=== emptyPath &&text[index]== "\n" ) {
+    
+  
+    // if (text[index]== "\n" ) {
+    //   yOffset +=lineHeight; // Increment vertical offset
+    //   xOffset = 0; // Reset horizontal offset
+    //   charCount=0;
+    //   lineswap=true;
+    //   return;
+    // }
+
+    if (charCount > 40 && path === emptyPath ||path=== emptyPath &&text[index]== "\n" ) {
         yOffset +=lineHeight; // Increment vertical offset
         xOffset = 0; // Reset horizontal offset
         charCount=0;
         lineswap=true;
+       
       }
      
     
@@ -435,7 +565,7 @@ function adjustPaths(paths) {
         const prevBounds = getBounds(adjustedPaths[index - 2]);
         const currBounds = getBounds(path);
         yOffset += prevBounds.maxY - currBounds.minY;
-        yOffset+=10;
+        yOffset+=13;
         const translatedPath = translatePath(path, xOffset, yOffset);
       adjustedPaths.push(translatedPath);
         // adjustedPaths.push(path);
@@ -570,7 +700,7 @@ function splicePathsWithConnectingCurve(paths, curve ,i) {
   }
 
 // Chaikin's algorithm for smoothing paths
-function chaikinSmooth(path, iterations = 10) {
+function chaikinSmooth(path, iterations = 9) {
     for (let i = 0; i < iterations; i++) {
       let newPath = [];
       for (let j = 0; j < path.length - 1; j++) {
@@ -603,3 +733,36 @@ function chaikinSmooth(path, iterations = 10) {
     }
     return newPath;
 }
+
+
+function drawPaper(style) {
+  const w = width, h = height;
+  strokeWeight(1);
+  
+  if (style === 'lined') {
+    stroke('#c0c0c0');
+    const spacing = 25.5;             // match your lineHeight
+    for (let y = spacing; y < h; y += spacing) {
+      line(0, y, w, y);
+    }
+  }
+  
+  else if (style === 'margined') {
+    // light horizontal lines …
+    drawPaper('lined');
+    // plus a red margin
+    stroke('#e00');
+    line(40, 0, 40, h);
+  }
+  
+  else if (style === 'grid') {
+    stroke('#e0e0e0');
+    const spacing = 30;
+    for (let x = spacing; x < w; x += spacing) line(x, 0, x, h);
+    for (let y = spacing; y < h; y += spacing) line(0, y, w, y);
+  }
+  
+  // add more styles (dotted, music-staff, graph-paper…) here
+}
+
+

@@ -11,13 +11,103 @@
 
         <title>SVG Demo</title>
 
+       <link rel="stylesheet" href="/PersonalTextOutput/style.css">
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
        
         <script src="./sketch.js"></script>
-        <script src="./svg.js"></script>       
+        <script src="./svg.js"></script>  
+             
        
 
         <style type="text/css">
+            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap');
+#main {
+  display: flex;
+  align-items: center;  /* tops aligned */
+  justify-content: center;  /* center the whole block in the page */
+}
+/* 2) Restyle the controls container */
+.controls {
+  margin: 0;
+  margin-left: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* 3) Shared styles for both select and button */
+.controls select,
+.controls button {
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.3s ease,
+    background-color 0.3s ease,
+    color 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+/* 4) Dropdown tweaks */
+.controls select {
+  background: #f0f0f0;
+  color: #333;
+}
+.controls select:hover {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transform: translateY(-1px);
+}
+
+/* 5) Download button special gradient */
+.controls button#downloadBtn {
+  color: white;
+}
+.controls button#downloadBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.draw-button {
+    font-family: inherit;
+  font-weight: 500;
+  font-size: 30px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.3s ease,
+    background-color 0.3s ease,
+    color 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+
+
+  margin-top: 5px;
+
+  color: white;
+
+
+
+}
+.draw-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+
+
+
+
+
+
             html {
                 width: 100%;
                 height: 100%;
@@ -49,4 +139,103 @@
 
    
     </head>
+    <body>
+       <div id="main">
+        
+        <div id="canvas-container">
+            <script>
+                // Ensure the p5.js setup function is executed
+                window.onload = function() {
+                    console.log("Page loaded, initializing canvas...");
+                };
+            </script>
+        </div>
+
+        <div class="controls">
+            <label for="styleSelector">Paper style:</label>
+            <select id="styleSelector">
+              <option value="plain">Plain</option>
+              <option value="lined">Lined</option>
+              <option value="margined">Margined</option>
+              <option value="grid">Grid</option>
+            </select>
+            <button id="downloadBtn" class="gradient-background">Download PNG</button>
+            <button id="draw-diagram-button" class="draw-button gradient-bg">
+                Upload Image
+              </button>
+             
+            
+      
+              <!-- hidden file input for picking an image -->
+              <input type="file" id="diagram-upload" accept="image/*" style="display:none" />
+              
+
+          </div>
+
+         
+        </div>
+
+  
+   
+    <script>
+        // grab elements
+const drawBtn   = document.getElementById('draw-diagram-button');
+const fileInput = document.getElementById('diagram-upload');
+
+let diagImg = null;
+let diagX = 50, diagY = 50;      // initial placement
+let diagW = 200, diagH = 200;    // default size
+let draggingDiag = false;
+let offsetX, offsetY;
+
+// 1) when you click “Draw (Beta)”, open file picker
+drawBtn.addEventListener('click', () => {
+  fileInput.value = '';  // reset
+  fileInput.click();
+});
+
+// 2) when file selected, load it into p5
+fileInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  loadImage(url, img => {
+    diagImg = img;
+    // scale it if too big
+    const scale = Math.min(200/img.width, 200/img.height, 1);
+    diagW = img.width * scale;
+    diagH = img.height * scale;
+    redraw();
+  }, () => alert("Failed to load image."));
+});
+
+// // 3) in draw(), render it if present
+
+
+// 4) allow dragging the diagram around
+canvas.addEventListener('pointerdown', (e) => {
+  if (!diagImg) return;
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left, y = e.clientY - rect.top;
+  if (x > diagX && x < diagX + diagW && y > diagY && y < diagY + diagH) {
+    draggingDiag = true;
+    offsetX = x - diagX;
+    offsetY = y - diagY;
+  }
+});
+canvas.addEventListener('pointermove', (e) => {
+  if (!draggingDiag) return;
+  const rect = canvas.getBoundingClientRect();
+  diagX = e.clientX - rect.left - offsetX;
+  diagY = e.clientY - rect.top  - offsetY;
+  redraw();
+});
+canvas.addEventListener('pointerup', () => {
+  draggingDiag = false;
+});
+
+
+
+    </script>
+     </body>
 </html>

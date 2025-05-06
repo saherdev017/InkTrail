@@ -20,15 +20,20 @@
   </style>
 </head>
 <body>
+
+  
+  <section id="drawOnCanvas">
     <div class=" d-flex flex-column align-items-center justify-content-center py-5 gradient-background" style="min-height: 100vh; font-family: 'Segoe UI', sans-serif; text-align: center;">
-        <h2 class="mb-3 fw-bold">✍️ Write an alphabet (multi-stroke supported)</h2>
-        <p class="mb-1">Press <strong>Enter</strong> to save stroke for a letter</p>
-        <p class="mb-4">Press <strong>S</strong> to download all paths as JSON</p>
-      
-        <canvas id="drawCanvas" width="400" height="400" style="background: white; border: 2px solid #000; border-radius: 8px;"></canvas>
-      
-        <button onclick="clearCanvas()" class="btn btn-dark mt-4">🧹 Clear Canvas</button>
-      </div>
+      <h2 class="mb-3 fw-bold">✍️ Write an alphabet (multi-stroke supported)</h2>
+      <p class="mb-1">Press <strong>Enter</strong> to save stroke for a letter</p>
+      <p class="mb-4">Press <strong>S</strong> to download all paths as JSON</p>
+    
+      <canvas id="drawCanvas" width="400" height="400" style="background: white; border: 2px solid #000; border-radius: 8px;"></canvas>
+    
+      <button onclick="clearCanvas()" class="btn btn-dark mt-4">🧹 Clear Canvas</button>
+    </div>
+  </section>
+    
       
 
   
@@ -68,28 +73,48 @@
     let strokes = [];
     let drawing = false;
 
-    // 1) Add this helper right up here, before any event‑listeners:
     function drawGuidelines() {
-      ctx.strokeStyle = '#ccc';
-      ctx.lineWidth   = 1;
-      ctx.font        = '12px sans-serif';
-      ctx.fillStyle   = '#666';
-      // y‑positions in pixels on a 400×400 canvas:
-      const guides = [
-        { y: 350, label: 'Baseline'    },
-        { y: 280, label: 'x‑Height'    },
-        { y: 220, label: 'Cap Height'  },
-        { y: 160, label: 'Ascender'    },
-        { y: 380, label: 'Descender'   }
-      ];
-      for (let g of guides) {
+  const W = canvas.width, H = canvas.height;
+  ctx.strokeStyle = '#ccc';
+  ctx.lineWidth   = 1;
+  ctx.font        = '12px sans-serif';
+  ctx.fillStyle   = '#666';
+
+  // relative positions
+  const guides = [
+    { y: H * 0.625, label: 'Baseline'   },//0.825
+    { y: H * 0.45,  label: 'x-Height'   },//0.65
+    { y: H * 0.30,  label: 'Cap Height' },//0.5
+    { y: H * 0.15,  label: 'Ascender'   },//0.35
+    { y: H * 0.75,  label: 'Descender'  }//0.95
+  ];
+
+
+  for (let g of guides) {
         ctx.beginPath();
         ctx.moveTo(0, g.y);
         ctx.lineTo(canvas.width, g.y);
         ctx.stroke();
         ctx.fillText(g.label, 8, g.y - 4);
       }
-    }
+  // guides.forEach(g => {
+  //   ctx.beginPath();
+  //   ctx.moveTo(0, g.y);
+  //   ctx.lineTo(W, g.y);
+  //   ctx.stroke();
+  //   ctx.fillText(g.label, 8, g.y - 4);
+  // });
+
+   // y‑positions in pixels on a 400×400 canvas:
+      // const guides = [
+      //   { y: 330, label: 'Baseline'    }, //350
+      //   { y: 260, label: 'x‑Height'    }, //280
+      //   { y: 200, label: 'Cap Height'  },  //220
+      //   { y: 140, label: 'Ascender'    }, //160
+      //   { y: 380, label: 'Descender'   } //380
+      // ];
+}
+
 
     function clearCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -131,15 +156,16 @@
     // Press Enter to save
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
-        const letter = prompt("Which alphabet did you write? (a-z)").toLowerCase();
-        if (letter && /^[a-z]$/.test(letter)) {
-          const key = `path_${letter}`;
+              const input = prompt("Which alphabet did you write? (A–Z or a–z)");
+    if (input && /^[A-Za-z]$/.test(input)) {
+          const letter = input;     // keep uppercase or lowercase
+          const key    = `path_${letter}`;
           if (!paths[key]) paths[key] = [];
           paths[key].push(...strokes);
           console.log(`✅ Saved strokes for '${letter}'`);
           console.log(`paths.${key} = ${JSON.stringify(paths[key])}`);
         } else {
-          alert("❌ Invalid input. Only lowercase a-z supported.");
+          alert("❌ Invalid input. Only letters A–Z or a–z  supported.");
         }
         strokes = [];
         clearCanvas();
