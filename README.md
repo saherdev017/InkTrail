@@ -13,6 +13,9 @@ A web-based application where users can upload a sample of their handwriting to 
 ---
 
 ## Demo
+[![Watch the demo on YouTube](https://img.youtube.com/vi/eKGKVnFmdgw?feature=shared/0.jpg)](https://youtu.be/eKGKVnFmdgw?feature=shared)
+
+[▶️ View Live Demo on YouTube](https://youtu.be/eKGKVnFmdgw?feature=shared)
 ![Handwriting Demo]()  
 [View Live Demo]()
 
